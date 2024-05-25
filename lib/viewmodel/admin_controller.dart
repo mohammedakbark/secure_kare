@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:secure_kare/model/agentmodel.dart';
 import 'package:secure_kare/model/managermodel.dart';
 import 'package:secure_kare/model/usermodel.dart';
-import 'package:secure_kare/viewmodel/user_store.dart';
+import 'package:secure_kare/model/workersmodel.dart';
 
 class AdminController with ChangeNotifier {
   int selectedIndex = 1;
@@ -73,20 +73,18 @@ class AdminController with ChangeNotifier {
   //-------------------Data Base
   final db = FirebaseFirestore.instance;
 
-
-
   Future addUser(UserModel userModel, uid) async {
     final doc = db.collection("USER").doc(uid);
 
     doc.set(userModel.toJson(uid));
   }
 
-
-Future addAgent(AgentModel agentModel, uid) async {
+  Future addAgent(AgentModel agentModel, uid) async {
     final doc = db.collection("AGENT").doc(uid);
 
     doc.set(agentModel.toJson(uid));
   }
+
 //  ----------------USER
   List<UserModel> userList = [];
   getAllUserData() async {
@@ -101,10 +99,11 @@ Future addAgent(AgentModel agentModel, uid) async {
 
   //   -----------AGENT
 
-   List<AgentModel> agentList = [];
+  List<AgentModel> agentList = [];
   getAllAgentsData() async {
     final snapshot = await db.collection("AGENT").get();
-    agentList = snapshot.docs.map((e) => AgentModel.fromJson(e.data())).toList();
+    agentList =
+        snapshot.docs.map((e) => AgentModel.fromJson(e.data())).toList();
   }
 
   deleteAgent(id) async {
@@ -113,15 +112,63 @@ Future addAgent(AgentModel agentModel, uid) async {
   }
 
   //--------------MANAGER
-   List<ManagerModel> managerList = [];
+  List<ManagerModel> managerList = [];
   getAllManagersData() async {
     final snapshot = await db.collection("MANAGER").get();
-    agentList = snapshot.docs.map((e) => AgentModel.fromJson(e.data())).toList();
+    managerList =
+        snapshot.docs.map((e) => ManagerModel.fromJson(e.data())).toList();
   }
 
   deleteManager(id) async {
     await db.collection("MANAGER").doc(id).delete();
     notifyListeners();
   }
+  
 
+  // Eployees
+  List<WorkersModel> listOfPendingWorkers = [];
+  Future<List<WorkersModel>> getPendingEMployees() async {
+    final snapshot = await db.collection("NEW WORKERS").get();
+
+    return listOfPendingWorkers =
+        snapshot.docs.map((e) => WorkersModel.fromJson(e.data())).toList();
+  }
+
+  Future rejectNewWorker(id) async {
+    db.collection("NEW WORKERS").doc(id).delete();
+  }
+
+  Future acceptNewWorker(WorkersModel workersModel, context) async {
+    try {
+      auth
+          .createUserWithEmailAndPassword(
+              email: workersModel.workersemail!,
+              password: workersModel.workerspassword!)
+          .then((value) {
+        db
+            .collection("ACCEPTED WORKERS")
+            .doc(value.user!.uid)
+            .set(workersModel.toJson(value.user!.uid))
+            .then((value) {
+          rejectNewWorker(workersModel.id!);
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text("Successful!")));
+        });
+      });
+    } catch (error) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text("Error: ${error.toString()}")));
+    }
+  }
+
+  List<WorkersModel> listOfAccepetdWorkers = [];
+  Future<List<WorkersModel>> getAllVerifiedWorkers() async {
+    final snapshot = await db.collection("ACCEPTED WORKERS").get();
+    return listOfAccepetdWorkers =
+        snapshot.docs.map((e) => WorkersModel.fromJson(e.data())).toList();
+  }
+
+ Future removeacceptedWorkers(id) async {
+    db.collection("ACCEPTED WORKERS").doc().delete();
+  }
 }

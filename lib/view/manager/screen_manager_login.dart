@@ -22,7 +22,7 @@ class ScreenManagerLogin extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(workprovider.loginphoto),
+                Image.asset("assets/loginphoto.jpeg"),
                 Text(
                   "Login To Your Account",
                   style: GoogleFonts.sarabun(fontSize: 20),

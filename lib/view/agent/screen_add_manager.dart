@@ -1,25 +1,24 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:secure_kare/model/managermodel.dart';
 import 'package:secure_kare/view/agent/screen_homeagent.dart';
+import 'package:secure_kare/viewmodel/agent_controller.dart';
 import 'package:secure_kare/viewmodel/function_provider.dart';
 
-import '../../viewmodel/manager_store.dart';
-
-class ScreenAddManager extends StatefulWidget {
-  const ScreenAddManager({super.key});
-
-  @override
-  State<ScreenAddManager> createState() => _ScreenAddManagerState();
-}
-
-class _ScreenAddManagerState extends State<ScreenAddManager> {
+class ScreenAddManager extends StatelessWidget {
+  final agentmanagername = TextEditingController();
+  final agentmanagerplace = TextEditingController();
+  final agentmanagerage = TextEditingController();
+  final agentmanageremail = TextEditingController();
+  final agentmanagerpassword = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  ScreenAddManager({super.key});
+  String? imageUrl;
   @override
   Widget build(BuildContext context) {
-    final funprovider = Provider.of<FunProvider>(context);
-    ManagerService managermodel = ManagerService();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -51,7 +50,7 @@ class _ScreenAddManagerState extends State<ScreenAddManager> {
         padding: const EdgeInsets.only(left: 30, right: 30, top: 45),
         child: SingleChildScrollView(
           child: Form(
-            key: funprovider.formkey,
+            key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -64,7 +63,7 @@ class _ScreenAddManagerState extends State<ScreenAddManager> {
                   height: 10,
                 ),
                 TextFormField(
-                  controller: funprovider.agentmanagername,
+                  controller: agentmanagername,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return "Please enter Your name";
@@ -89,7 +88,7 @@ class _ScreenAddManagerState extends State<ScreenAddManager> {
                   height: 10,
                 ),
                 TextFormField(
-                  controller: funprovider.agentmanagerplace,
+                  controller: agentmanagerplace,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return "Please enter Your Place";
@@ -130,7 +129,7 @@ class _ScreenAddManagerState extends State<ScreenAddManager> {
                   //     return null;
                   //   }
                   // },
-                  controller: funprovider.agentmanagerage,
+                  controller: agentmanagerage,
                   decoration: InputDecoration(
                       contentPadding: EdgeInsets.all(10),
                       border: OutlineInputBorder(
@@ -138,28 +137,6 @@ class _ScreenAddManagerState extends State<ScreenAddManager> {
                 ),
                 const SizedBox(
                   height: 10,
-                ),
-                Text(
-                  "ID Number",
-                  style: GoogleFonts.manrope(
-                      fontWeight: FontWeight.w500, fontSize: 15),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  controller: funprovider.agentmanagerIdnumber,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Please enter Your ID number";
-                    } else {
-                      return null;
-                    }
-                  },
-                  decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(10),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10))),
                 ),
                 const SizedBox(
                   height: 10,
@@ -173,13 +150,12 @@ class _ScreenAddManagerState extends State<ScreenAddManager> {
                   height: 10,
                 ),
                 TextFormField(
-                  controller: funprovider.agentmanageremail,
+                  controller: agentmanageremail,
                   validator: (value) {
-                    if (funprovider.emailregexp
-                        .hasMatch(funprovider.agentmanageremail.text)) {
-                      return null;
-                    } else {
+                    if (!(value!.contains("@gmail.com"))) {
                       return "Please enter valid Email";
+                    } else {
+                      return null;
                     }
                   },
                   keyboardType: TextInputType.emailAddress,
@@ -190,29 +166,6 @@ class _ScreenAddManagerState extends State<ScreenAddManager> {
                 ),
                 const SizedBox(
                   height: 10,
-                ),
-                Text(
-                  "ID",
-                  style: GoogleFonts.manrope(
-                      fontWeight: FontWeight.w500, fontSize: 15),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  controller: funprovider.agentmanagerid,
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Please enter Your ID ";
-                    } else {
-                      return null;
-                    }
-                  },
-                  decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(10),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10))),
                 ),
                 const SizedBox(
                   height: 10,
@@ -227,7 +180,7 @@ class _ScreenAddManagerState extends State<ScreenAddManager> {
                 ),
                 TextFormField(
                   obscureText: true,
-                  controller: funprovider.agentmanagerpassword,
+                  controller: agentmanagerpassword,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return "Please enter Your Password";
@@ -243,16 +196,34 @@ class _ScreenAddManagerState extends State<ScreenAddManager> {
                 const SizedBox(
                   height: 10,
                 ),
-                ElevatedButton(
-                    style:
-                        ElevatedButton.styleFrom(backgroundColor: Colors.white),
-                    onPressed: () {
-                      funprovider.pickimagefromgallery();
-                    },
-                    child: Text(
-                      "Add Image",
-                      style: GoogleFonts.manrope(color: Colors.black),
-                    )),
+                Consumer<FunProvider>(builder: (context, funProvider, chuld) {
+                  return ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white),
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          backgroundColor: Colors.red,
+                          content: Text(
+                            "Wait...",
+                            style: GoogleFonts.plusJakartaSans(),
+                          ),
+                        ));
+                        funProvider.pickimagefromgallery().then((value) {
+                          imageUrl = funProvider.imageurl;
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            backgroundColor: Colors.red,
+                            content: Text(
+                              "Image uploaded",
+                              style: GoogleFonts.plusJakartaSans(),
+                            ),
+                          ));
+                        });
+                      },
+                      child: Text(
+                        "Add Image",
+                        style: GoogleFonts.manrope(color: Colors.black),
+                      ));
+                }),
                 Padding(
                   padding: const EdgeInsets.only(
                     left: 130,
@@ -261,24 +232,48 @@ class _ScreenAddManagerState extends State<ScreenAddManager> {
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Color.fromARGB(255, 13, 42, 91)),
                       onPressed: () {
-                        if (funprovider.formkey.currentState!.validate()) {
-                          funprovider.signupwithmanager(context).then(
-                            (value) {
-                              funprovider.sendEmail(
-                                  funprovider.agentmanagerpassword.text,
-                                  ('Work force kerela Login Password is:${funprovider.agentmanagerpassword.text}'),
-                                  funprovider.agentmanageremail.text);
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) {
-                                  return ScreenHomeAgent();
-                                },
+                        if (_formKey.currentState!.validate()) {
+                          if (imageUrl != null) {
+                            AgentController()
+                                .signupwithmanager(
+                                    context,
+                                    ManagerModel(
+                                        agencyId: FirebaseAuth
+                                            .instance.currentUser!.uid,
+                                        managername: agentmanagername.text,
+                                        managerplace: agentmanagerplace.text,
+                                        managerage: agentmanagerage.text,
+                                        manageremail: agentmanageremail.text,
+                                        managerpassword:
+                                            agentmanagerpassword.text,
+                                        managerimage: imageUrl),
+                                    agentmanagerpassword.text)
+                                .then((value) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                backgroundColor: Colors.green,
+                                content: Text(
+                                  "Registration Success",
+                                  style: GoogleFonts.plusJakartaSans(),
+                                ),
                               ));
-                            },
-                          );
+                              final pop = Navigator.of(context);
+                              pop.pop();
+                              pop.pop();
+                            });
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              backgroundColor: Colors.red,
+                              content: Text(
+                                "Pick Profile",
+                                style: GoogleFonts.plusJakartaSans(),
+                              ),
+                            ));
+                          }
                         }
                       },
                       child: Text(
-                        " Update",
+                        " Add Manager",
                         style: GoogleFonts.manrope(),
                       )),
                 ),

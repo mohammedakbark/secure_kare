@@ -45,7 +45,7 @@ class CustomeDrawer extends StatelessWidget {
                   style: OutlinedButton.styleFrom(
                       elevation: 10, backgroundColor: Colors.white),
                   onPressed: () {
-                    controller.changeIndex(0);
+                    // controller.changeIndex(0);
                     Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
@@ -124,18 +124,18 @@ class CustomeDrawer extends StatelessWidget {
             const SizedBox(
               height: 15,
             ),
-            TextButton(
-                onPressed: () {
-                  controller.changeIndex(4);
-                  // Navigator.pushReplacement(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => ScreenAdminNotifications()));
-                },
-                child: Text(
-                  "Notifications",
-                  style: GoogleFonts.outfit(fontSize: 18, color: Colors.black),
-                ))
+            // TextButton(
+            //     onPressed: () {
+            //       controller.changeIndex(4);
+            //       // Navigator.pushReplacement(
+            //       //     context,
+            //       //     MaterialPageRoute(
+            //       //         builder: (context) => ScreenAdminNotifications()));
+            //     },
+            //     child: Text(
+            //       "Notifications",
+            //       style: GoogleFonts.outfit(fontSize: 18, color: Colors.black),
+            //     ))
           ],
         ),
       ),

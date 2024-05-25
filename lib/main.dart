@@ -5,6 +5,7 @@ import 'package:secure_kare/screen_splash.dart';
 import 'package:secure_kare/view/admin/admin_home.dart';
 
 import 'package:secure_kare/viewmodel/admin_controller.dart';
+import 'package:secure_kare/viewmodel/agent_controller.dart';
 
 import 'package:secure_kare/viewmodel/function_provider.dart';
 import 'package:secure_kare/viewmodel/ui_work_provider.dart';
@@ -42,6 +43,11 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider<AdminController>(
             create: (context) {
               return AdminController();
+            },
+          ),
+           ChangeNotifierProvider<AgentController>(
+            create: (context) {
+              return AgentController();
             },
           ),
         ],

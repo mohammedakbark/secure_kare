@@ -15,15 +15,11 @@ import 'package:secure_kare/model/projectmodel.dart';
 import 'package:secure_kare/model/user_report_model.dart';
 import 'package:secure_kare/model/usermodel.dart';
 import 'package:secure_kare/model/workersmodel.dart';
-import 'package:secure_kare/view/admin/register_employee.dart';
-import 'package:secure_kare/view/agent/screen_homeagent.dart';
+
 import 'package:secure_kare/view/manager/screen_home_manager.dart';
 import 'package:secure_kare/view/user/screen_user_home.dart';
-import 'package:secure_kare/viewmodel/manager_store.dart';
-import 'package:secure_kare/viewmodel/user_store.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
-import 'package:secure_kare/viewmodel/workers_store.dart';
 
 class FunProvider extends ChangeNotifier {
   String? imageurl = "";
@@ -107,21 +103,9 @@ class FunProvider extends ChangeNotifier {
   final agentaddbudget = TextEditingController();
   final agentaddmanager = TextEditingController();
   //Agent AddManager
-  final agentmanagername = TextEditingController();
-  final agentmanagerplace = TextEditingController();
-  final agentmanagerage = TextEditingController();
-  final agentmanagerIdnumber = TextEditingController();
-  final agentmanageremail = TextEditingController();
-  final agentmanagerid = TextEditingController();
-  final agentmanagerpassword = TextEditingController();
+ 
   //Agent Add Workers
-  final workername = TextEditingController();
-  final workerplace = TextEditingController();
-  final workerage = TextEditingController();
-  final workeridnumber = TextEditingController();
-  final workeremail = TextEditingController();
-  final workerid = TextEditingController();
-  final workerpassword = TextEditingController();
+
 
   final workerlogemail = TextEditingController();
 
@@ -165,8 +149,7 @@ class FunProvider extends ChangeNotifier {
   final managerloginemail = TextEditingController();
   final managerloginpassword = TextEditingController();
   //Agent Login
-  final Agentloginemail = TextEditingController();
-  final Agentloginpassword = TextEditingController();
+
 
   // Future signup(context) async {
   //   try {
@@ -322,22 +305,9 @@ class FunProvider extends ChangeNotifier {
   //   _image = img;
   //   notifyListeners();
   // }
-  emailsend() async {
-    print("email.send");
-    final Email email = Email(
-      body: agentmanageremail.text,
-      subject: agentmanagerpassword.text,
-      cc: ['cc@example.com'],
-      bcc: ['bcc@example.com'],
-      attachmentPaths: ['/path/to/attachment.zip'],
-      isHTML: false,
-    );
-
-    await FlutterEmailSender.send(email);
-  }
-
+  
 // screenAddworkers//
-  pickimagefromgallery() async {
+ Future pickimagefromgallery() async {
     ImagePicker imagePicker = ImagePicker();
     SettableMetadata metadata = SettableMetadata(contentType: "image/jpeg");
     XFile? file = await imagePicker.pickImage(source: ImageSource.gallery);
@@ -569,77 +539,13 @@ class FunProvider extends ChangeNotifier {
     await FlutterEmailSender.send(email);
   }
 
-  clearAddworkersField() {
-    workername.clear();
-    workerplace.clear();
-    workerage.clear();
-    workeridnumber.clear();
-    workeremail.clear();
-    workerid.clear();
-    workerpassword.clear();
-  }
+  // 
   //signupwithworkers
 
-  Future signupwith(context) async {
-    WorkersStore store = WorkersStore();
-    try {
-      await auth
-          .createUserWithEmailAndPassword(
-              email: workeremail.text, password: workerpassword.text)
-          .then((value) {
-        String uid = value.user!.uid;
-        //  DocumentSnapshot ds = snapshot.
-        store.addWorkers(
-            WorkersModel(
-                workersname: workername.text,
-                workersplace: workerplace.text,
-                workersidnumber: workeridnumber.text,
-                workersemail: workeremail.text,
-                workersage: workerage.text,
-                workersid: workerid.text,
-                workerimage: imageurl,
-                workerspassword: workerpassword.text,
-                id: uid),
-            uid);
-
-        notifyListeners();
-      });
-    } on FirebaseAuthException catch (e) {
-      print(e.toString());
-    }
-  }
-
+  
   //Signupwith manager
 
-  Future signupwithmanager(context) async {
-    ManagerService managerService = ManagerService();
-    try {
-      await auth
-          .createUserWithEmailAndPassword(
-              email: agentmanageremail.text,
-              password: agentmanagerpassword.text)
-          .then((value) {
-        String uid = value.user!.uid;
-
-        managerService.addManager(
-            ManagerModel(
-                managername: agentmanagername.text,
-                managerplace: agentmanagerplace.text,
-                managerage: agentmanagerage.text,
-                manageridnumber: agentmanagerIdnumber.text,
-                manageremail: agentmanageremail.text,
-                managerid: agentmanagerid.text,
-                managerpassword: agentmanagerpassword.text,
-                managerimage: imageurl,
-                id: uid),
-            uid);
-
-        notifyListeners();
-      });
-    } on FirebaseAuthException catch (e) {
-      print(e.toString());
-    }
-  }
+  
 
   //Signupwith Agent
   
@@ -750,56 +656,7 @@ class FunProvider extends ChangeNotifier {
   }
 
   ///Logi With Agent
-  LoginwithAgent(context) async {
-    try {
-      await auth
-          .signInWithEmailAndPassword(
-              email: Agentloginemail.text, password: Agentloginpassword.text)
-          .then(
-        (credential) {
-          String id = credential.user!.uid;
-
-          print(id);
-          final snackBar = SnackBar(
-            backgroundColor: const Color.fromARGB(255, 0, 0, 0),
-            content: Text(
-              "Login Succesfully",
-              style: GoogleFonts.sarabun(),
-            ),
-          );
-
-          // Display the Snackbar
-          ScaffoldMessenger.of(context).showSnackBar(snackBar);
-
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) {
-              return ScreenHomeAgent();
-            },
-          ));
-        },
-      );
-    } catch (e) {
-      print("ccccccccccccccccccccccccccccccc");
-      print(e.toString());
-      final snackBar = SnackBar(
-        backgroundColor: Colors.red,
-        content: Text(
-          "Check Your Emai and Password",
-          style: GoogleFonts.plusJakartaSans(),
-        ),
-        action: SnackBarAction(
-          label: 'Undo',
-          textColor: const Color.fromARGB(255, 0, 0, 0),
-          onPressed: () {
-            // Some code to undo the change.
-          },
-        ),
-      );
-
-      // Display the Snackbar
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
-    }
-  }
+  ///
 
   WorkersModel? workersModel;
   String? workname;
@@ -821,9 +678,7 @@ class FunProvider extends ChangeNotifier {
       workname = workersModel!.workersname;
       workplace = workersModel!.workersplace;
       workage = workersModel!.workersage;
-      workidnumber = workersModel!.workersidnumber;
       workemail = workersModel!.workersemail;
-      workid = workersModel!.workersid;
       workpassword = workersModel!.workerspassword;
       workimage = imageurl;
 
@@ -857,9 +712,9 @@ class FunProvider extends ChangeNotifier {
       managername = managermodel!.managername;
       managerplace = managermodel!.managerplace;
       managerage = managermodel!.managerage;
-      manageridnumber = managermodel!.manageridnumber;
+      // manageridnumber = managermodel!.manageridnumber;
       manageremail = managermodel!.manageremail;
-      managerid = managermodel!.managerid;
+      // managerid = managermodel!.managerid;
       managerpassword = managermodel!.managerpassword;
       managerimage = imageurl;
       print(managername);
@@ -870,40 +725,16 @@ class FunProvider extends ChangeNotifier {
 
   //fetch agent data
   AgentModel? agentModel;
-  String? agentname;
-  String? agentaddress;
-  String? agentcity;
-  String? agentcntctctnumber;
-  String? agentemail;
-  String? agentstate;
-  String? agentpassword;
-  String? agentimage;
+  // String? agentname;
+  // String? agentaddress;
+  // String? agentcity;
+  // String? agentcntctctnumber;
+  // String? agentemail;
+  // String? agentstate;
+  // String? agentpassword;
+  // String? agentimage;
 
-  fetchCurrentagentData() async {
-    print("zzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
-    print(FirebaseAuth.instance.currentUser!.uid);
-    final snapshot = await FirebaseFirestore.instance
-        .collection("AGENT")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get();
-    if (snapshot.exists) {
-      agentModel = AgentModel.fromJson(snapshot.data()!);
-      agentname = agentModel!.agencyname;
-      agentaddress = agentModel!.agentaddress;
-      agentcity = agentModel!.agentcity;
-      agentcntctctnumber = agentModel!.contactnumber;
-      agentemail = agentModel!.agentemail;
-      agentstate = agentModel!.agentstate;
-      agentpassword = agentModel!.password;
-      agentimage = imageurl;
-      print("ccccccccccccccccccccccccccccccc");
-      print(agentname);
-      print("ddddddddddddddddddddddddddddddddddd");
-
-      print(agentModel!.agentcity);
-      print(agentModel!.agencyname);
-    }
-  }
+  
 
 // SPECIFIED DATA FETCHING FROM ONE COLLECTION IN SCREEN
 //userreport
