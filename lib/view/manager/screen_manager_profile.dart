@@ -14,7 +14,6 @@ class ScreenManagerProfile extends StatelessWidget {
       .collection("MANAGER")
       .doc(FirebaseAuth.instance.currentUser!.uid);
 
-  ManagerModel managersModel = ManagerModel();
 
   @override
   Widget build(BuildContext context) {

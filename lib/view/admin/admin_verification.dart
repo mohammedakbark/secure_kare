@@ -27,7 +27,7 @@ class AdminVerification extends StatelessWidget {
                   style:
                       ElevatedButton.styleFrom(backgroundColor: Colors.black),
                   onPressed: () {
-                    controller.changeIndex(5);
+                    controller.changeIndex(4);
                   },
                   child: Text(
                     "Pending verifications",
@@ -46,7 +46,7 @@ class AdminVerification extends StatelessWidget {
                   style:
                       ElevatedButton.styleFrom(backgroundColor: Colors.black),
                   onPressed: () {
-                    controller.changeIndex(6);
+                    controller.changeIndex(5);
                   },
                   child: Text(
                     "Verified registrations",

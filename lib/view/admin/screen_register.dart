@@ -6,7 +6,6 @@ import 'package:secure_kare/model/usermodel.dart';
 import 'package:secure_kare/model/workersmodel.dart';
 import 'package:secure_kare/view/admin/screen_otp.dart';
 import 'package:secure_kare/viewmodel/admin_controller.dart';
-import 'package:secure_kare/viewmodel/user_store.dart';
 import 'package:secure_kare/viewmodel/function_provider.dart';
 
 class ScreenRegister extends StatelessWidget {

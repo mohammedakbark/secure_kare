@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -5,21 +6,22 @@ import 'package:provider/provider.dart';
 import 'package:secure_kare/model/workersmodel.dart';
 import 'package:secure_kare/view/agent/screen_homeagent.dart';
 import 'package:secure_kare/view/user/screen_user_home.dart';
+import 'package:secure_kare/viewmodel/agent_controller.dart';
 import 'package:secure_kare/viewmodel/function_provider.dart';
-import 'package:secure_kare/viewmodel/workers_store.dart';
 
-class ScreenAddWorker extends StatefulWidget {
-  const ScreenAddWorker({super.key});
+class ScreenAddWorker extends StatelessWidget {
+  ScreenAddWorker({super.key});
+  final workername = TextEditingController();
+  final workerplace = TextEditingController();
+  final workerage = TextEditingController();
+  final workeremail = TextEditingController();
+  final workerpassword = TextEditingController();
 
-  @override
-  State<ScreenAddWorker> createState() => _ScreenAddWorkerState();
-}
+  final _formKey = GlobalKey<FormState>();
 
-class _ScreenAddWorkerState extends State<ScreenAddWorker> {
+  String? imageUrl;
   @override
   Widget build(BuildContext context) {
-    WorkersStore workersobj = WorkersStore();
-    final funprovider = Provider.of<FunProvider>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -50,7 +52,7 @@ class _ScreenAddWorkerState extends State<ScreenAddWorker> {
         padding: const EdgeInsets.only(left: 30, right: 30, top: 45),
         child: SingleChildScrollView(
           child: Form(
-            key: funprovider.formkey,
+            key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -63,7 +65,7 @@ class _ScreenAddWorkerState extends State<ScreenAddWorker> {
                   height: 10,
                 ),
                 TextFormField(
-                  controller: funprovider.workername,
+                  controller: workername,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return "Please Enter Worker Name";
@@ -89,7 +91,7 @@ class _ScreenAddWorkerState extends State<ScreenAddWorker> {
                   height: 10,
                 ),
                 TextFormField(
-                  controller: funprovider.workerplace,
+                  controller: workerplace,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return "Please Enter Worker Place";
@@ -115,7 +117,7 @@ class _ScreenAddWorkerState extends State<ScreenAddWorker> {
                 ),
                 TextFormField(
                   keyboardType: TextInputType.number,
-                  controller: funprovider.workerage,
+                  controller: workerage,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return "Please enter worker age";
@@ -131,28 +133,6 @@ class _ScreenAddWorkerState extends State<ScreenAddWorker> {
                 const SizedBox(
                   height: 10,
                 ),
-                Text(
-                  "ID Number",
-                  style: GoogleFonts.manrope(
-                      fontWeight: FontWeight.w500, fontSize: 15),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  controller: funprovider.workeridnumber,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Please enter Your ID number";
-                    } else {
-                      return null;
-                    }
-                  },
-                  decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(10),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10))),
-                ),
                 const SizedBox(
                   height: 10,
                 ),
@@ -165,13 +145,12 @@ class _ScreenAddWorkerState extends State<ScreenAddWorker> {
                   height: 10,
                 ),
                 TextFormField(
-                  controller: funprovider.workeremail,
+                  controller: workeremail,
                   validator: (value) {
-                    if (funprovider.emailregexp
-                        .hasMatch(funprovider.workeremail.text)) {
-                      return null;
-                    } else {
+                    if (!(value!.contains("@gmail.com"))) {
                       return "Please enter valid Email";
+                    } else {
+                      return null;
                     }
                   },
                   keyboardType: TextInputType.emailAddress,
@@ -182,29 +161,6 @@ class _ScreenAddWorkerState extends State<ScreenAddWorker> {
                 ),
                 const SizedBox(
                   height: 10,
-                ),
-                Text(
-                  "ID",
-                  style: GoogleFonts.manrope(
-                      fontWeight: FontWeight.w500, fontSize: 15),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  controller: funprovider.workerid,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Please enter Your ID ";
-                    } else {
-                      return null;
-                    }
-                  },
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(10),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10))),
                 ),
                 const SizedBox(
                   height: 10,
@@ -219,7 +175,7 @@ class _ScreenAddWorkerState extends State<ScreenAddWorker> {
                 ),
                 TextFormField(
                   obscureText: true,
-                  controller: funprovider.workerpassword,
+                  controller: workerpassword,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return "Please enter Your Password";
@@ -238,16 +194,35 @@ class _ScreenAddWorkerState extends State<ScreenAddWorker> {
                 ),
                 Row(
                   children: [
-                    ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white),
-                        onPressed: () async {
-                          funprovider.pickimagefromgallery();
-                        },
-                        child: Text(
-                          "Add Image",
-                          style: GoogleFonts.manrope(color: Colors.black),
-                        )),
+                    Consumer<FunProvider>(builder: (context, provider, child) {
+                      return ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white),
+                          onPressed: () async {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              backgroundColor: Colors.red,
+                              content: Text(
+                                "Wait...",
+                                style: GoogleFonts.plusJakartaSans(),
+                              ),
+                            ));
+                            provider.pickimagefromgallery().then((value) {
+                              imageUrl = provider.imageurl;
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                backgroundColor: Colors.red,
+                                content: Text(
+                                  "Image Uploaded",
+                                  style: GoogleFonts.plusJakartaSans(),
+                                ),
+                              ));
+                            });
+                          },
+                          child: Text(
+                            "Add Image",
+                            style: GoogleFonts.manrope(color: Colors.black),
+                          ));
+                    }),
                     const SizedBox(
                       width: 20,
                     ),
@@ -259,21 +234,46 @@ class _ScreenAddWorkerState extends State<ScreenAddWorker> {
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Color.fromARGB(255, 13, 42, 91)),
                       onPressed: () {
-                        if (funprovider.formkey.currentState!.validate()) {
-                          funprovider.signupwith(context).then(
-                            (value) {
-                              funprovider.sendEmail(
-                                  funprovider.workername.text,
-                                  ('Work force kerela Login Password is:${funprovider.workerpassword.text}'),
-                                  funprovider.workeremail.text);
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) {
-                                  return ScreenHomeAgent();
-                                },
-                              ));
-                            },
-                          );
+                        if (_formKey.currentState!.validate()) {
+                          if (imageUrl != null) {
+                            AgentController()
+                                .addWorkers(WorkersModel(
+                              agencyId: FirebaseAuth.instance.currentUser!.uid,
+                              workersname: workername.text,
+                              workersplace: workerplace.text,
+                              workersage: workerage.text,
+                              workersemail: workeremail.text,
+                              workerspassword: workerpassword.text,
+                              workerimage: imageUrl,
+                            ))
+                                .then(
+                              (value) {
+                                final pop = Navigator.of(context);
+                                pop.pop();
+                                pop.pop();
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  backgroundColor: Colors.green,
+                                  content: Text(
+                                    "Registration Success",
+                                    style: GoogleFonts.plusJakartaSans(),
+                                  ),
+                                ));
+                              },
+                            );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              backgroundColor: Colors.red,
+                              content: Text(
+                                "Pick Image",
+                                style: GoogleFonts.plusJakartaSans(),
+                              ),
+                            ));
+                          }
                         }
+                        // if (_formKey.currentState!.validate()) {
+
+                        // }
                       },
                       child: Text(
                         " Update",

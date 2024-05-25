@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +25,7 @@ class AdminHRM extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Managers",
+                    "Agencies",
                     style: GoogleFonts.amaranth(
                         fontWeight: FontWeight.bold, fontSize: 25),
                   ),
@@ -42,6 +44,8 @@ class AdminHRM extends StatelessWidget {
                         );
                       }
                       final data = controller.agentList;
+
+                      log(data.length.toString());
                       return data.isEmpty
                           ? const Center(
                               child: Text("No Managers"),
@@ -57,7 +61,7 @@ class AdminHRM extends StatelessWidget {
                                           AssetImage("assets/kanew.jpg"),
                                     ),
                                     title: Text(
-                                      data[index].agentemail!,
+                                      data[index].agentemail.toString(),
                                       style: GoogleFonts.amaranth(
                                           color: const Color.fromARGB(
                                               255, 153, 153, 153),
@@ -92,7 +96,7 @@ class AdminHRM extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Workers",
+                    "Managers",
                     style: GoogleFonts.amaranth(
                         fontWeight: FontWeight.bold, fontSize: 25),
                   ),

@@ -20,7 +20,7 @@ class AdminHome extends StatelessWidget {
     AdminVerification(),
     AdminFeedBackAndSupport(),
     AdminHRM(),
-    AdminNotification(),
+    // AdminNotification(),
     ScreenPendingVerifications(),
     ScreenVerifiedRegisstrations()
   ];

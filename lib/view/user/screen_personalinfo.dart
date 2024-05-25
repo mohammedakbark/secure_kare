@@ -8,7 +8,6 @@ import 'package:provider/provider.dart';
 import 'package:secure_kare/model/workersmodel.dart';
 import 'package:secure_kare/view/user/screen_user_home.dart';
 import 'package:secure_kare/viewmodel/function_provider.dart';
-import 'package:secure_kare/viewmodel/user_store.dart';
 
 class ScreenUserPersonalInfo extends StatefulWidget {
   ScreenUserPersonalInfo();
@@ -21,7 +20,6 @@ class _ScreenUserPersonalInfoState extends State<ScreenUserPersonalInfo> {
   final user = FirebaseFirestore.instance
       .collection("WORKERS")
       .doc(FirebaseAuth.instance.currentUser!.uid);
-  WorkersModel workersModel = WorkersModel();
 
   @override
   Widget build(BuildContext context) {
