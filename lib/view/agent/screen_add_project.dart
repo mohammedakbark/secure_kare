@@ -1,14 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:secure_kare/model/managermodel.dart';
 import 'package:secure_kare/model/projectmodel.dart';
 import 'package:secure_kare/view/agent/screen_homeagent.dart';
+import 'package:secure_kare/viewmodel/agent_controller.dart';
 import 'package:secure_kare/viewmodel/function_provider.dart';
-import 'package:secure_kare/viewmodel/project_store.dart';
 import 'package:secure_kare/viewmodel/ui_work_provider.dart';
-
-
 
 class ScreenAgentAddProject extends StatefulWidget {
   const ScreenAgentAddProject({super.key});
@@ -18,11 +20,18 @@ class ScreenAgentAddProject extends StatefulWidget {
 }
 
 class _ScreenAgentAddProjectState extends State<ScreenAgentAddProject> {
+  final formkey = GlobalKey<FormState>();
+  String? imageUrl;
+  final agentaddprojectname = TextEditingController();
+  final agentaddplace = TextEditingController();
+  final agentaddstartdate = TextEditingController();
+  final agentaddenddate = TextEditingController();
+  final agentaddnoworers = TextEditingController();
+  final agentaddbudget = TextEditingController();
+  final agentaddmanager = TextEditingController();
+  ManagerModel? selectedManager;
   @override
   Widget build(BuildContext context) {
-    final funprovider = Provider.of<FunProvider>(context);
-    final workprovider = Provider.of<WorkProvider>(context);
-    ProjectStore projectobj = ProjectStore();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -30,7 +39,7 @@ class _ScreenAgentAddProjectState extends State<ScreenAgentAddProject> {
               onPressed: () {
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
                   builder: (context) {
-                    return ScreenHomeAgent();
+                    return const ScreenHomeAgent();
                   },
                 ));
               },
@@ -48,12 +57,14 @@ class _ScreenAgentAddProjectState extends State<ScreenAgentAddProject> {
           ),
           elevation: 0,
           centerTitle: true,
-          actions: [IconButton(onPressed: () {}, icon: Icon(Icons.error))]),
+          actions: [
+            IconButton(onPressed: () {}, icon: const Icon(Icons.error))
+          ]),
       body: Padding(
         padding: const EdgeInsets.only(left: 30, right: 30, top: 40),
         child: SingleChildScrollView(
           child: Form(
-            key: funprovider.formkey,
+            key: formkey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -66,7 +77,7 @@ class _ScreenAgentAddProjectState extends State<ScreenAgentAddProject> {
                   height: 10,
                 ),
                 TextFormField(
-                  controller: funprovider.agentaddprojectname,
+                  controller: agentaddprojectname,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return "Please enter Your Project Name ";
@@ -75,7 +86,7 @@ class _ScreenAgentAddProjectState extends State<ScreenAgentAddProject> {
                     }
                   },
                   decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(10),
+                      contentPadding: const EdgeInsets.all(10),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10))),
                 ),
@@ -91,7 +102,7 @@ class _ScreenAgentAddProjectState extends State<ScreenAgentAddProject> {
                   height: 10,
                 ),
                 TextFormField(
-                  controller: funprovider.agentaddplace,
+                  controller: agentaddplace,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return "Please enter Your Place";
@@ -100,7 +111,7 @@ class _ScreenAgentAddProjectState extends State<ScreenAgentAddProject> {
                     }
                   },
                   decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(10),
+                      contentPadding: const EdgeInsets.all(10),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10))),
                 ),
@@ -117,7 +128,7 @@ class _ScreenAgentAddProjectState extends State<ScreenAgentAddProject> {
                 ),
                 TextFormField(
                   readOnly: true,
-                  controller: funprovider.agentaddstartdate,
+                  controller: agentaddstartdate,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return "Please enter Your project Start date";
@@ -128,11 +139,23 @@ class _ScreenAgentAddProjectState extends State<ScreenAgentAddProject> {
                   decoration: InputDecoration(
                       //  hintText: "Project start date",
                       suffixIcon: IconButton(
-                          onPressed: () {
-                            funprovider.datepickforstrtdate(context);
+                          onPressed: () async {
+                            final DateTime? selecteddate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2050),
+                            );
+                            final formatteddate =
+                                DateFormat("dd/MM/yyyy").format(selecteddate!);
+
+                            print(formatteddate);
+
+                            // print(selecteddate);
+                            agentaddstartdate.text = formatteddate.toString();
                           },
-                          icon: Icon(Icons.calendar_month)),
-                      contentPadding: EdgeInsets.all(10),
+                          icon: const Icon(Icons.calendar_month)),
+                      contentPadding: const EdgeInsets.all(10),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10))),
                 ),
@@ -149,7 +172,7 @@ class _ScreenAgentAddProjectState extends State<ScreenAgentAddProject> {
                 ),
                 TextFormField(
                   readOnly: true,
-                  controller: funprovider.agentaddenddate,
+                  controller: agentaddenddate,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return "Please enter Your project End date";
@@ -159,11 +182,20 @@ class _ScreenAgentAddProjectState extends State<ScreenAgentAddProject> {
                   },
                   decoration: InputDecoration(
                       suffixIcon: IconButton(
-                          onPressed: () {
-                            funprovider.datepickforenddate(context);
+                          onPressed: () async {
+                            final DateTime? selecteddate = await showDatePicker(
+                              context: context,
+                              initialDate: DateTime.now(),
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2050),
+                            );
+                            final formatteddate =
+                                DateFormat("dd/MM/yyyy").format(selecteddate!);
+                            agentaddenddate.text = formatteddate;
+                            print(formatteddate);
                           },
-                          icon: Icon(Icons.calendar_month)),
-                      contentPadding: EdgeInsets.all(10),
+                          icon: const Icon(Icons.calendar_month)),
+                      contentPadding: const EdgeInsets.all(10),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10))),
                 ),
@@ -179,7 +211,7 @@ class _ScreenAgentAddProjectState extends State<ScreenAgentAddProject> {
                   height: 10,
                 ),
                 TextFormField(
-                  controller: funprovider.agentaddnoworers,
+                  controller: agentaddnoworers,
                   keyboardType: TextInputType.number,
                   validator: (value) {
                     if (value!.isEmpty) {
@@ -189,7 +221,7 @@ class _ScreenAgentAddProjectState extends State<ScreenAgentAddProject> {
                     }
                   },
                   decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(10),
+                      contentPadding: const EdgeInsets.all(10),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10))),
                 ),
@@ -205,7 +237,7 @@ class _ScreenAgentAddProjectState extends State<ScreenAgentAddProject> {
                   height: 10,
                 ),
                 TextFormField(
-                  controller: funprovider.agentaddbudget,
+                  controller: agentaddbudget,
                   validator: (value) {
                     if (value!.isEmpty) {
                       return "Please enter Your Budget";
@@ -215,7 +247,7 @@ class _ScreenAgentAddProjectState extends State<ScreenAgentAddProject> {
                   },
                   keyboardType: TextInputType.number,
                   decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(10),
+                      contentPadding: const EdgeInsets.all(10),
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10))),
                 ),
@@ -230,40 +262,68 @@ class _ScreenAgentAddProjectState extends State<ScreenAgentAddProject> {
                 const SizedBox(
                   height: 10,
                 ),
-                TextFormField(
-                  controller: funprovider.agentaddmanager,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return "Please Enter Project Manager";
-                    } else {
-                      return null;
-                    }
-                  },
-                  decoration: InputDecoration(
-                      suffixIcon: IconButton(
-                          onPressed: () {
-                            workprovider.dropdownmanager(context);
+                FutureBuilder(
+                    future: AgentController().fechCurrentGanetManager(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      return DropdownButtonFormField(
+                          validator: (value) {
+                            if (value == null) {
+                              return "Select Manager";
+                            } else {
+                              return null;
+                            }
                           },
-                          icon: Icon(Icons.arrow_drop_down)),
-                      contentPadding: EdgeInsets.all(10),
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10))),
-                ),
+                          decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.all(10),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10))),
+                          items: snapshot.data!
+                              .map((e) => DropdownMenuItem(
+                                  value: e, child: Text(e.managername!)))
+                              .toList(),
+                          onChanged: (selected) {
+                            selectedManager = selected;
+                          });
+                    }),
                 const SizedBox(
                   height: 10,
                 ),
                 Row(
                   children: [
-                    ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.white),
-                        onPressed: () {
-                          funprovider.pickimagefromgallery();
-                        },
-                        child: Text(
-                          "Add Image",
-                          style: GoogleFonts.manrope(color: Colors.black),
-                        )),
+                    Consumer<FunProvider>(builder: (context, provider, child) {
+                      return ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white),
+                          onPressed: () {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              backgroundColor: Colors.red,
+                              content: Text(
+                                "Wait...",
+                                style: GoogleFonts.plusJakartaSans(),
+                              ),
+                            ));
+                            provider.pickimagefromgallery().then((value) {
+                              imageUrl = provider.imageurl;
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                backgroundColor: Colors.red,
+                                content: Text(
+                                  "Image uploaded",
+                                  style: GoogleFonts.plusJakartaSans(),
+                                ),
+                              ));
+                            });
+                          },
+                          child: Text(
+                            "Add Image",
+                            style: GoogleFonts.manrope(color: Colors.black),
+                          ));
+                    }),
                     const SizedBox(
                       width: 20,
                     ),
@@ -276,31 +336,45 @@ class _ScreenAgentAddProjectState extends State<ScreenAgentAddProject> {
                           backgroundColor:
                               const Color.fromARGB(255, 13, 42, 91)),
                       onPressed: () {
-                        if (funprovider.formkey.currentState!.validate()) {
-                          ProjectDetailsModel agentobj = ProjectDetailsModel(
-                            agentaddprojectname:
-                                funprovider.agentaddprojectname.text,
-                            agentaddplace: funprovider.agentaddplace.text,
-                            agentaddstartdate:
-                                funprovider.agentaddstartdate.text,
-                            agentaddenddate: funprovider.agentaddenddate.text,
-                            agentaddnoworers: funprovider.agentaddnoworers.text,
-                            agentaddbudget: funprovider.agentaddbudget.text,
-                            agentaddmanager: funprovider.agentaddmanager.text,
-                            projectimage: funprovider.imageurl,
-                          );
-                          projectobj
-                              .addprojectdetails(
-                            agentobj,
-                          )
-                              .then((value) {
-                            Navigator.of(context)
-                                .pushReplacement(MaterialPageRoute(
-                              builder: (context) {
-                                return ScreenHomeAgent();
-                              },
+                        if (formkey.currentState!.validate()) {
+                          if (imageUrl != null) {
+                            AgentController()
+                                .addprojectdetails(
+                                    ProjectDetailsModel(
+                                      agetID: FirebaseAuth
+                                          .instance.currentUser!.uid,
+                                      projectName: agentaddprojectname.text,
+                                      place: agentaddplace.text,
+                                      startDate: agentaddstartdate.text,
+                                      endDate: agentaddenddate.text,
+                                      numberOfWorkers: agentaddnoworers.text,
+                                      budget: agentaddbudget.text,
+                                      manager: selectedManager,
+                                      projectimage: imageUrl,
+                                    ),
+                                    selectedManager!.id)
+                                .then((value) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                backgroundColor: Colors.green,
+                                content: Text(
+                                  "Success",
+                                  style: GoogleFonts.plusJakartaSans(),
+                                ),
+                              ));
+                              final pop = Navigator.of(context);
+                              pop.pop();
+                              pop.pop();
+                            });
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              backgroundColor: Colors.red,
+                              content: Text(
+                                "Upload project image",
+                                style: GoogleFonts.plusJakartaSans(),
+                              ),
                             ));
-                          });
+                          }
                         }
                       },
                       child: Text(

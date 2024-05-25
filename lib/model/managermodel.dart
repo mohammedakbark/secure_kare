@@ -25,7 +25,7 @@ class ManagerModel {
   get length => null;
   Map<String, dynamic> toJson(docId) => {
         "id": docId,
-        "agencyId":agencyId,
+        "agencyId": agencyId,
         "managername": managername,
         "managerplace": managerplace,
         "managerage": managerage,
@@ -35,7 +35,7 @@ class ManagerModel {
       };
   factory ManagerModel.fromJson(Map<String, dynamic> json) {
     return ManagerModel(
-      agencyId:json["agencyId"],
+      agencyId: json["agencyId"],
       managername: json["managername"],
       managerplace: json["managerplace"],
       managerage: json["managerage"],

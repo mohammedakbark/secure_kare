@@ -28,7 +28,7 @@ class FunProvider extends ChangeNotifier {
   String imageurladhaar = "";
   String? uid = "";
   UserModel? usermodelobj;
-  AgentModel ?agentmodelobj;
+  AgentModel? agentmodelobj;
   FirebaseAuth auth = FirebaseAuth.instance;
   final db = FirebaseFirestore.instance;
   EmailOTP myAuth = EmailOTP();
@@ -95,17 +95,10 @@ class FunProvider extends ChangeNotifier {
   final agentcompanyname = TextEditingController();
   final agentrgpassword = TextEditingController();
   //AGENT Add Project
-  final agentaddprojectname = TextEditingController();
-  final agentaddplace = TextEditingController();
-  final agentaddstartdate = TextEditingController();
-  final agentaddenddate = TextEditingController();
-  final agentaddnoworers = TextEditingController();
-  final agentaddbudget = TextEditingController();
-  final agentaddmanager = TextEditingController();
-  //Agent AddManager
- 
-  //Agent Add Workers
 
+  //Agent AddManager
+
+  //Agent Add Workers
 
   final workerlogemail = TextEditingController();
 
@@ -149,7 +142,6 @@ class FunProvider extends ChangeNotifier {
   final managerloginemail = TextEditingController();
   final managerloginpassword = TextEditingController();
   //Agent Login
-
 
   // Future signup(context) async {
   //   try {
@@ -305,9 +297,9 @@ class FunProvider extends ChangeNotifier {
   //   _image = img;
   //   notifyListeners();
   // }
-  
+
 // screenAddworkers//
- Future pickimagefromgallery() async {
+  Future pickimagefromgallery() async {
     ImagePicker imagePicker = ImagePicker();
     SettableMetadata metadata = SettableMetadata(contentType: "image/jpeg");
     XFile? file = await imagePicker.pickImage(source: ImageSource.gallery);
@@ -384,37 +376,6 @@ class FunProvider extends ChangeNotifier {
     } catch (error) {
       print(error);
     }
-    notifyListeners();
-  }
-
-  datepickforstrtdate(context) async {
-    final DateTime? selecteddate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2050),
-    );
-    final formatteddate = DateFormat("dd/MM/yyyy").format(selecteddate!);
-
-    print(formatteddate);
-
-    // print(selecteddate);
-    agentaddstartdate.text = formatteddate.toString();
-    notifyListeners();
-  }
-
-  datepickforenddate(context) async {
-    final DateTime? selecteddate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2050),
-    );
-    final formatteddate = DateFormat("dd/MM/yyyy").format(selecteddate!);
-
-    print(formatteddate);
-
-    agentaddenddate.text = formatteddate.toString();
     notifyListeners();
   }
 
@@ -539,16 +500,12 @@ class FunProvider extends ChangeNotifier {
     await FlutterEmailSender.send(email);
   }
 
-  // 
+  //
   //signupwithworkers
 
-  
   //Signupwith manager
 
-  
-
   //Signupwith Agent
-  
 
 //login worker
   signin(context) async {
@@ -734,8 +691,6 @@ class FunProvider extends ChangeNotifier {
   // String? agentpassword;
   // String? agentimage;
 
-  
-
 // SPECIFIED DATA FETCHING FROM ONE COLLECTION IN SCREEN
 //userreport
   List<UserReportsModel> userreportModel = [];
@@ -776,16 +731,7 @@ class FunProvider extends ChangeNotifier {
         .snapshots()
         .map((snapshot) {
       return snapshot.docs.map((doc) {
-        return ProjectDetailsModel(
-          agentaddprojectname: doc['agentaddprojectname'],
-          agentaddplace: doc['agentaddplace'] ?? '',
-          agentaddmanager: doc['agentaddmanager'],
-          agentaddnoworers: doc['agentaddnoworers'],
-          projectimage: doc['projectimage'] ?? '',
-          agentaddbudget: doc['agentaddbudget'] ?? '',
-          agentaddenddate: doc['agentaddenddate'] ?? '',
-          agentaddstartdate: doc['agentaddstartdate'],
-        );
+        return ProjectDetailsModel.fromJson(doc.data());
       }).toList();
     });
   }

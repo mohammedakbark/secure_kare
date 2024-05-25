@@ -10,7 +10,7 @@ import 'package:secure_kare/model/usermodel.dart';
 import 'package:secure_kare/model/workersmodel.dart';
 
 class AdminController with ChangeNotifier {
-  int selectedIndex = 1;
+  int selectedIndex = 0;
   final auth = FirebaseAuth.instance;
   final myAuth = EmailOTP();
 
@@ -123,7 +123,6 @@ class AdminController with ChangeNotifier {
     await db.collection("MANAGER").doc(id).delete();
     notifyListeners();
   }
-  
 
   // Eployees
   List<WorkersModel> listOfPendingWorkers = [];
@@ -168,7 +167,7 @@ class AdminController with ChangeNotifier {
         snapshot.docs.map((e) => WorkersModel.fromJson(e.data())).toList();
   }
 
- Future removeacceptedWorkers(id) async {
+  Future removeacceptedWorkers(id) async {
     db.collection("ACCEPTED WORKERS").doc().delete();
   }
 }

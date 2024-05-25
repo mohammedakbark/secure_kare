@@ -17,19 +17,19 @@ class AdminHome extends StatelessWidget {
 
   List<Widget> pages = [
     ScreenRegister(),
-    AdminVerification(),
-    AdminFeedBackAndSupport(),
-    AdminHRM(),
+    const AdminVerification(),
+    const AdminFeedBackAndSupport(),
+    const AdminHRM(),
     // AdminNotification(),
-    ScreenPendingVerifications(),
-    ScreenVerifiedRegisstrations()
+    const ScreenPendingVerifications(),
+    const ScreenVerifiedRegisstrations()
   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Row(
         children: [
-          CustomeDrawer(),
+          const CustomeDrawer(),
           Consumer<AdminController>(builder: (context, controller, child) {
             return Expanded(child: pages[controller.selectedIndex]);
           })
