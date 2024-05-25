@@ -31,32 +31,32 @@ class CustomeDrawer extends StatelessWidget {
               height: 10,
             ),
             Text(
-              "Roshan sharma",
+              "Admin-SECURE KARE",
               style:
                   GoogleFonts.outfit(fontWeight: FontWeight.bold, fontSize: 17),
             ),
             const SizedBox(
               height: 10,
             ),
-            SizedBox(
-              height: 25,
-              width: 130,
-              child: OutlinedButton(
-                  style: OutlinedButton.styleFrom(
-                      elevation: 10, backgroundColor: Colors.white),
-                  onPressed: () {
-                    // controller.changeIndex(0);
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const ScreenAdminProfile(),
-                        ));
-                  },
-                  child: Text(
-                    "Update profile",
-                    style: GoogleFonts.outfit(color: Colors.black),
-                  )),
-            ),
+            // SizedBox(
+            //   height: 25,
+            //   width: 130,
+            //   child: OutlinedButton(
+            //       style: OutlinedButton.styleFrom(
+            //           elevation: 10, backgroundColor: Colors.white),
+            //       onPressed: () {
+            //         // controller.changeIndex(0);
+            //         Navigator.pushReplacement(
+            //             context,
+            //             MaterialPageRoute(
+            //               builder: (context) => const ScreenAdminProfile(),
+            //             ));
+            //       },
+            //       child: Text(
+            //         "Update profile",
+            //         style: GoogleFonts.outfit(color: Colors.black),
+            //       )),
+            // ),
             const SizedBox(
               height: 50,
             ),
@@ -70,7 +70,7 @@ class CustomeDrawer extends StatelessWidget {
                   //     ));
                 },
                 child: Text(
-                  "Register an employee",
+                  "Register an Agency",
                   style: GoogleFonts.outfit(fontSize: 18, color: Colors.black),
                 )),
             const SizedBox(

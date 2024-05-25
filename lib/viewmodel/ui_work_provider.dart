@@ -93,35 +93,7 @@ class WorkProvider extends ChangeNotifier {
     );
   }
 
-  dropdownmanager(context) {
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          content: Padding(
-            padding: const EdgeInsets.only(
-              left: 25,
-              right: 25,
-            ),
-            child: Container(
-              width: 100,
-              height: 100,
-              color: Colors.white,
-              child: DropdownButtonFormField(
-                value: selectedmanager,
-                items: manager.map<DropdownMenuItem>((e) {
-                  return DropdownMenuItem(value: e, child: Text(e));
-                }).toList(),
-                onChanged: (value) {
-                  selectedmanager = value!;
-                },
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
+  
 
   selectAvailable() {
     isselected = !isselected;

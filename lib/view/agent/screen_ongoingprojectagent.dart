@@ -20,7 +20,7 @@ class _ScreenOngoingProjectAgentState extends State<ScreenOngoingProjectAgent> {
 
   @override
   Widget build(BuildContext context) {
-    final workprovider = Provider.of<WorkProvider>(context);
+    // final workprovider = Provider.of<WorkProvider>(context);
     return StreamBuilder(
       stream: project.snapshots(),
       builder: (context, snapshot) {
@@ -61,21 +61,26 @@ class _ScreenOngoingProjectAgentState extends State<ScreenOngoingProjectAgent> {
           ),
           body: Column(
             children: [
-              Row(
-                children: [
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  CircleAvatar(backgroundImage: AssetImage(workprovider.mc)),
-                  const SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    "MC HOUSE BUILDING",
-                    style: GoogleFonts.nunitoSans(
-                        fontSize: 12, fontWeight: FontWeight.bold),
-                  )
-                ],
+              // Row(
+              //   children: [
+              //     const SizedBox(
+              //       width: 20,
+              //     ),
+              //     CircleAvatar(backgroundImage: AssetImage(workprovider.mc)),
+              //     const SizedBox(
+              //       width: 10,
+              //     ),
+              //     Text(
+              //       "MC HOUSE BUILDING",
+              //       style: GoogleFonts.nunitoSans(
+              //           fontSize: 12, fontWeight: FontWeight.bold),
+              //     )
+              //   ],
+              // ),
+              Text(
+                "Ongoing Projects",
+                style: GoogleFonts.nunitoSans(
+                    fontSize: 12, fontWeight: FontWeight.bold),
               ),
               Padding(
                 padding: const EdgeInsets.all(15),
@@ -96,18 +101,19 @@ class _ScreenOngoingProjectAgentState extends State<ScreenOngoingProjectAgent> {
                       Expanded(
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: ListView.builder(
+                          child: ListView.separated(
+                            separatorBuilder: (context, index) => Divider(),
                             itemBuilder: (context, index) {
-                              var projectimage =
-                                  snapshot.data!.docs[index]['projectimage'];
-                              return Container(
-                                child: Padding(
+                              final data = snapshot.data!.docs[index];
+
+                              return ExpansionTile(
+                                title: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
                                     children: [
                                       SizedBox(
                                           width: 150,
-                                          child: projectimage == ""
+                                          child: data['projectimage'] == ""
                                               ? const Icon(
                                                   CupertinoIcons.house_fill,
                                                   size: 100,
@@ -115,17 +121,47 @@ class _ScreenOngoingProjectAgentState extends State<ScreenOngoingProjectAgent> {
                                               : SizedBox(
                                                   height: 130,
                                                   child: Image.network(
-                                                    projectimage,
+                                                    data['projectimage'],
                                                   ),
                                                 )),
                                       Text(
-                                          "Cunstruction work of super market isin progress",
+                                          "Cunstruction work of ${data["projectName"]} is in progress",
                                           style: GoogleFonts.alata(
                                               fontSize: 13,
                                               fontWeight: FontWeight.bold))
                                     ],
                                   ),
                                 ),
+                                children: [
+                                  Text(
+                                      "Manager: ${data["manager"]["managername"]}",
+                                      style: GoogleFonts.alata(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w600)),
+                                  Text(
+                                      "Number of Workers: ${data["numberOfWorkers"]}",
+                                      style: GoogleFonts.alata(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w600)),
+                                  Text("Budget: ${data["budget"]}",
+                                      style: GoogleFonts.alata(
+                                          fontSize: 13,
+                                          fontWeight: FontWeight.w600)),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Text("Start Date: ${data["startDate"]}",
+                                          style: GoogleFonts.alata(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w600)),
+                                      Text("End Date: ${data["endDate"]}",
+                                          style: GoogleFonts.alata(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.w600))
+                                    ],
+                                  )
+                                ],
                               );
                             },
                             itemCount: snapshot.data!.docs.length,

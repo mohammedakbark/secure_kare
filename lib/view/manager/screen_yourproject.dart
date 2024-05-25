@@ -16,7 +16,7 @@ class ScreenYourProjects extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ProjectDetailsModel projectdetails = ProjectDetailsModel();
+    // ProjectDetailsModel projectdetails = ProjectDetailsModel();
     final funprovider = Provider.of<FunProvider>(context);
 
     return Scaffold(
@@ -95,11 +95,11 @@ class ScreenYourProjects extends StatelessWidget {
                               Row(
                                 children: [
                                   Text(
-                                    prodata.agentaddprojectname!,
+                                    prodata.projectName!,
                                     style: GoogleFonts.mukta(),
                                   ),
                                   Text(
-                                    "(${prodata.agentaddplace!})",
+                                    "(${prodata.place!})",
                                     style:
                                         GoogleFonts.mukta(color: Colors.grey),
                                   ),
@@ -123,7 +123,7 @@ class ScreenYourProjects extends StatelessWidget {
                                 Row(
                                   children: [
                                     Text(
-                                      'Deadlock :   ${prodata.agentaddenddate}',
+                                      'Deadlock :   ${prodata.endDate}',
                                       style: GoogleFonts.mukta(),
                                     ),
                                     IconButton(
