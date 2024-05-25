@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "651854409807",
+    "project_id": "kare-355d3",
+    "storage_bucket": "kare-355d3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:651854409807:android:a5b7f4e86a8ae6eb283a3a",
+        "android_client_info": {
+          "package_name": "com.example.secure_kare"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEYaxz1X8oAhBNUOWNwetkh8wV0Dl8ie0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
