@@ -14,7 +14,6 @@ class ScreenManagerProfile extends StatelessWidget {
       .collection("MANAGER")
       .doc(FirebaseAuth.instance.currentUser!.uid);
 
-
   @override
   Widget build(BuildContext context) {
     final funprovider = Provider.of<FunProvider>(context);
@@ -22,7 +21,7 @@ class ScreenManagerProfile extends StatelessWidget {
       future: funprovider.fetchCurrentmaangerdata(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         }
 
         return Scaffold(
@@ -79,7 +78,7 @@ class ScreenManagerProfile extends StatelessWidget {
                 ),
                 child: Container(
                   width: 400,
-                  height: 500,
+                  // height: 500,
                   child: Padding(
                     padding: const EdgeInsets.all(20),
                     child: SingleChildScrollView(
@@ -131,7 +130,7 @@ class ScreenManagerProfile extends StatelessWidget {
                                   fontSize: 19,
                                   fontWeight: FontWeight.bold),
                             ),
-                            Text(funprovider.manageridnumber!),
+                            Text('funprovider.manageridnumber!'),
                             const SizedBox(
                               height: 15,
                             ),
@@ -153,7 +152,7 @@ class ScreenManagerProfile extends StatelessWidget {
                                   fontSize: 19,
                                   fontWeight: FontWeight.bold),
                             ),
-                            Text(funprovider.managerid!),
+                            Text('funprovider.managerid!'),
                             const SizedBox(
                               height: 15,
                             ),

@@ -8,7 +8,7 @@ import 'package:secure_kare/viewmodel/ui_work_provider.dart';
 class ScreenWorkers extends StatelessWidget {
   ScreenWorkers({super.key});
   final CollectionReference worker =
-      FirebaseFirestore.instance.collection("WORKERS");
+      FirebaseFirestore.instance.collection("ACCEPTED WORKERS");
 
   @override
   Widget build(BuildContext context) {

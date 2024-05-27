@@ -464,7 +464,7 @@ class FunProvider extends ChangeNotifier {
                     backgroundColor: Colors.indigo),
                 onPressed: () {
                   final CollectionReference agent =
-                      FirebaseFirestore.instance.collection("AGENT");
+                      FirebaseFirestore.instance.collection("ACCEPTED WORKERS");
                   print("update");
                   update();
                   Navigator.pop(context);
@@ -482,7 +482,7 @@ class FunProvider extends ChangeNotifier {
   update() {
     final DocumentReference<Map<String, dynamic>> user = FirebaseFirestore
         .instance
-        .collection("WORKERS")
+        .collection("ACCEPTED WORKERS")
         .doc(FirebaseAuth.instance.currentUser!.uid);
     user.update({
       "workersname": workernameupdate.text,
@@ -627,7 +627,7 @@ class FunProvider extends ChangeNotifier {
 
   fetchCurrentUserData() async {
     final snapshot = await FirebaseFirestore.instance
-        .collection("WORKERS")
+        .collection("ACCEPTED WORKERS")
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get();
     if (snapshot.exists) {
@@ -637,7 +637,7 @@ class FunProvider extends ChangeNotifier {
       workage = workersModel!.workersage;
       workemail = workersModel!.workersemail;
       workpassword = workersModel!.workerspassword;
-      workimage = imageurl;
+      workimage = workersModel!.workerimage;
 
       print(workname);
       print(workersModel!.workersage);

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,7 +20,7 @@ class ScreenUserPersonalInfo extends StatefulWidget {
 
 class _ScreenUserPersonalInfoState extends State<ScreenUserPersonalInfo> {
   final user = FirebaseFirestore.instance
-      .collection("WORKERS")
+      .collection("ACCEPTED WORKERS")
       .doc(FirebaseAuth.instance.currentUser!.uid);
 
   @override
@@ -31,7 +33,11 @@ class _ScreenUserPersonalInfoState extends State<ScreenUserPersonalInfo> {
       future: funprovider.fetchCurrentUserData(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return Scaffold(
+            body: Center(
+              child: Text('loading.....'),
+            ),
+          );
         }
 
         return Scaffold(
@@ -62,11 +68,12 @@ class _ScreenUserPersonalInfoState extends State<ScreenUserPersonalInfo> {
               OutlinedButton(
                   onPressed: () {
                     funprovider.userprofileupdate(
-                        context,
-                        funprovider.workname!,
-                        funprovider.workplace,
-                        funprovider.workage,
-                       );
+                      context,
+                      funprovider.workname!,
+                      funprovider.workplace,
+                      funprovider.workage,
+                    );
+                     
                   },
                   child: Text("Edit Profile")),
               Padding(
@@ -76,7 +83,7 @@ class _ScreenUserPersonalInfoState extends State<ScreenUserPersonalInfo> {
                 ),
                 child: Container(
                   width: 400,
-                  height: 500,
+                  // height: 600,
                   child: Padding(
                     padding: const EdgeInsets.all(20),
                     child: SingleChildScrollView(
@@ -128,7 +135,7 @@ class _ScreenUserPersonalInfoState extends State<ScreenUserPersonalInfo> {
                                   fontSize: 19,
                                   fontWeight: FontWeight.bold),
                             ),
-                            Text(funprovider.workidnumber!),
+                            Text('funprovider.workidnumber!'),
                             const SizedBox(
                               height: 15,
                             ),
@@ -150,7 +157,7 @@ class _ScreenUserPersonalInfoState extends State<ScreenUserPersonalInfo> {
                                   fontSize: 19,
                                   fontWeight: FontWeight.bold),
                             ),
-                            Text(funprovider.workid!),
+                            Text('funprovider.workid!'),
                             const SizedBox(
                               height: 15,
                             ),

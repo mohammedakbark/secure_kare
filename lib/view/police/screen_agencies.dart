@@ -48,6 +48,11 @@ class ScreenAgencies extends StatelessWidget {
       body: StreamBuilder(
         stream: agent.snapshots(),
         builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
           return ListView.builder(
             itemCount: snapshot.data!.docs.length,
             itemBuilder: (context, index) {
