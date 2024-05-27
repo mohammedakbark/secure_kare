@@ -107,7 +107,7 @@ class _ScreenHomeManagerState extends State<ScreenHomeManager> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10))),
                 onPressed: () {
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => ScreenYourProjects(),
                   ));
                 },
@@ -150,7 +150,6 @@ class _ScreenHomeManagerState extends State<ScreenHomeManager> {
                             scrollDirection: Axis.horizontal,
                             itemCount: singleproject.length,
                             itemBuilder: (context, index) {
-                              
                               var projectimages =
                                   singleproject[index].projectimage;
 

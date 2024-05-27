@@ -18,10 +18,10 @@ class ScreenProjectDetails extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return CircularProgressIndicator();
         }
-        var projectname = snapshot.data!.docs.first['agentaddprojectname'];
-        var projectplace = snapshot.data!.docs.first['agentaddplace'];
-        var projectenddate = snapshot.data!.docs.first['agentaddenddate'];
-        var projectstartdate = snapshot.data!.docs.first['agentaddstartdate'];
+        var projectname = snapshot.data!.docs.first['projectName'];
+        var projectplace = snapshot.data!.docs.first['place'];
+        var projectenddate = snapshot.data!.docs.first['endDate'];
+        var projectstartdate = snapshot.data!.docs.first['startDate'];
 
         return Scaffold(
           backgroundColor: Colors.white,
@@ -119,8 +119,7 @@ class ScreenProjectDetails extends StatelessWidget {
                   itemBuilder: (context, index) {
                     var projectphoto =
                         snapshot.data!.docs[index]['projectimage'];
-                    var projectname =
-                        snapshot.data!.docs[index]['agentaddprojectname'];
+                    var projectname = snapshot.data!.docs[index]['projectName'];
                     return ListTile(
                       leading: SizedBox(
                           width: 150,

@@ -144,7 +144,7 @@ class ScreenYourProjects extends StatelessWidget {
                                           backgroundColor: Colors.indigo),
                                       onPressed: () {
                                         Navigator.of(context)
-                                            .pushReplacement(MaterialPageRoute(
+                                            .push(MaterialPageRoute(
                                           builder: (context) =>
                                               ScreenProjectDetails(),
                                         ));
