@@ -51,7 +51,7 @@ class ScreenCompamw extends StatelessWidget {
           children: [
             InkWell(
               onTap: () {
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => ScreenComplaints(),
                 ));
               },
@@ -87,7 +87,7 @@ class ScreenCompamw extends StatelessWidget {
                 children: [
                   InkWell(
                     onTap: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => ScreenAgencies(),
                       ));
                     },
@@ -119,7 +119,7 @@ class ScreenCompamw extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => ScreenManagers(),
                       ));
                     },
@@ -151,7 +151,7 @@ class ScreenCompamw extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => ScreenWorkers(),
                       ));
                     },

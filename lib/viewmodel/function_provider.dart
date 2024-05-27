@@ -9,10 +9,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:secure_kare/model/agentmodel.dart';
-import 'package:secure_kare/model/manager_report_model.dart';
+import 'package:secure_kare/model/report_model.dart';
 import 'package:secure_kare/model/managermodel.dart';
 import 'package:secure_kare/model/projectmodel.dart';
-import 'package:secure_kare/model/user_report_model.dart';
 import 'package:secure_kare/model/usermodel.dart';
 import 'package:secure_kare/model/workersmodel.dart';
 
@@ -693,10 +692,10 @@ class FunProvider extends ChangeNotifier {
 
 // SPECIFIED DATA FETCHING FROM ONE COLLECTION IN SCREEN
 //userreport
-  List<UserReportsModel> userreportModel = [];
+  List<Reports> userreportModel = [];
   Future getreport() async {
     final snapshot = await db
-        .collection('UserReports')
+        .collection('Reports')
         .where(
           'reportid',
           isEqualTo: auth.currentUser!.uid,
@@ -704,16 +703,16 @@ class FunProvider extends ChangeNotifier {
         .get();
 
     userreportModel = snapshot.docs.map((doc) {
-      return UserReportsModel.fromJson(doc.data());
+      return Reports.fromJson(doc.data());
     }).toList();
   }
 
   ///////////////////////////////////////////////
 
-  List<ManagerReportModel> managerreports = [];
+  List<Reports> managerreports = [];
   Future getreportmanager() async {
     final snapshot = await db
-        .collection('ManagerReports')
+        .collection('Reports')
         .where(
           'reportid',
           isEqualTo: auth.currentUser!.uid,
@@ -721,7 +720,7 @@ class FunProvider extends ChangeNotifier {
         .get();
 
     managerreports = snapshot.docs.map((doc) {
-      return ManagerReportModel.fromJson(doc.data());
+      return Reports.fromJson(doc.data());
     }).toList();
   }
 

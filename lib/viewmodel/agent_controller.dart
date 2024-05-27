@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:secure_kare/model/agentmodel.dart';
 import 'package:secure_kare/model/managermodel.dart';
 import 'package:secure_kare/model/projectmodel.dart';
+import 'package:secure_kare/model/report_model.dart';
 import 'package:secure_kare/model/workersmodel.dart';
 import 'package:secure_kare/view/agent/screen_homeagent.dart';
 
@@ -101,17 +102,15 @@ class AgentController with ChangeNotifier {
   }
 
   List<ManagerModel> listOfManager = [];
- Future<List<ManagerModel>> fechCurrentGanetManager() async {
+  Future<List<ManagerModel>> fechCurrentGanetManager() async {
     final snapshot = await db
         .collection("MANAGER")
         .where("agencyId", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
         .get();
 
-  return  listOfManager =
+    return listOfManager =
         snapshot.docs.map((e) => ManagerModel.fromJson(e.data()!)).toList();
   }
-
- 
 
   Future signupwithmanager(context, ManagerModel managerModel, password) async {
     try {
@@ -153,9 +152,17 @@ class AgentController with ChangeNotifier {
 
   //  ------------PROJECT
 
-   Future addprojectdetails(ProjectDetailsModel projectModel,managerID) async {
+  Future addprojectdetails(ProjectDetailsModel projectModel, managerID) async {
     final doc = db.collection("PROJECT").doc();
 
-    doc.set(projectModel.toJson(doc.id,managerID));
+    doc.set(projectModel.toJson(doc.id, managerID));
+  }
+
+  List<Reports> listofReporst = [];
+  fetchAllReports() async {
+    final snapsht =
+        await FirebaseFirestore.instance.collection("Reports").get();
+    listofReporst =
+        snapsht.docs.map((e) => Reports.fromJson(e.data())).toList();
   }
 }

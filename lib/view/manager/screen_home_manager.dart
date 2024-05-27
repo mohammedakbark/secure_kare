@@ -80,7 +80,7 @@ class _ScreenHomeManagerState extends State<ScreenHomeManager> {
                         borderRadius: BorderRadius.circular(10))),
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) => ScreenManagerReportProblems(),
+                    builder: (context) => const ScreenManagerReportProblems(),
                   ));
                 },
                 child: SizedBox(
@@ -155,38 +155,43 @@ class _ScreenHomeManagerState extends State<ScreenHomeManager> {
 
                               // =
                               //     snapshot.data!.docs[index]['projectimage'];
-                              return Container(
-                                width: 200,
-                                height: 10,
-                                decoration: BoxDecoration(
-                                    color: Color.fromARGB(255, 219, 205, 204),
-                                    borderRadius: BorderRadius.circular(15)),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(15),
-                                  child: SizedBox(
-                                      width: 150,
-                                      child: projectimages == ""
-                                          ? const Icon(
-                                              CupertinoIcons.house_fill,
-                                              size: 100,
-                                            )
-                                          : SizedBox(
-                                              height: 130,
-                                              child: Image.network(
-                                                instance
-                                                    .project[index].projectimage
-                                                    .toString(),
-                                                fit: BoxFit.cover,
-                                                errorBuilder: (context, error,
-                                                    stackTrace) {
-                                                  return Center(
-                                                    child: Icon(Icons.error),
-                                                  );
-                                                },
-                                              ),
-                                            )),
-                                ),
-                              );
+                              return singleproject.isEmpty
+                                  ? const Center(child: Text("No Project"))
+                                  : Container(
+                                      width: 200,
+                                      height: 10,
+                                      decoration: BoxDecoration(
+                                          color: const Color.fromARGB(
+                                              255, 219, 205, 204),
+                                          borderRadius:
+                                              BorderRadius.circular(15)),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(15),
+                                        child: SizedBox(
+                                            width: 150,
+                                            child: projectimages == ""
+                                                ? const Icon(
+                                                    CupertinoIcons.house_fill,
+                                                    size: 100,
+                                                  )
+                                                : SizedBox(
+                                                    height: 130,
+                                                    child: Image.network(
+                                                      instance.project[index]
+                                                          .projectimage
+                                                          .toString(),
+                                                      fit: BoxFit.cover,
+                                                      errorBuilder: (context,
+                                                          error, stackTrace) {
+                                                        return const Center(
+                                                          child:
+                                                              Icon(Icons.error),
+                                                        );
+                                                      },
+                                                    ),
+                                                  )),
+                                      ),
+                                    );
                             },
                             separatorBuilder: (context, index) =>
                                 const Divider(endIndent: 10),

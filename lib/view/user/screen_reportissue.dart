@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:random_string/random_string.dart';
-import 'package:secure_kare/model/user_report_model.dart';
+import 'package:secure_kare/model/report_model.dart';
 import 'package:secure_kare/view/user/screen_user_home.dart';
 import 'package:secure_kare/viewmodel/function_provider.dart';
 import 'package:secure_kare/viewmodel/user_report_service.dart';
@@ -69,13 +69,15 @@ class ScreenReportIssue extends StatelessWidget {
                   String reportid = FirebaseAuth.instance.currentUser!.uid;
                   String id = randomAlphaNumeric(10);
                   userReportServicer.addUserreports(
-                      UserReportsModel(
-                        reportid: reportid,
-                        reportuserissues:
-                            funprovider.reportproblemcontroller.text,
-                        id: id,
-                        reportname: funprovider.workname.toString(),
-                      ),
+                      Reports(
+                          reportstatus: "reported",
+                          reportid: reportid,
+                          reportManagerissues:
+                              funprovider.reportproblemcontroller.text,
+                          id: id,
+                          from: "User "
+                          // reportname: funprovider.workname.toString(),
+                          ),
                       reportid,
                       id);
                   Navigator.of(context).push(MaterialPageRoute(

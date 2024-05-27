@@ -12,9 +12,7 @@ class ScreenUserReportList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String? currentuserid = FirebaseAuth.instance.currentUser?.uid;
     final funprovider = Provider.of<FunProvider>(context);
-    final workprovider = Provider.of<WorkProvider>(context);
     return FutureBuilder(
         future: funprovider.getreport(),
         builder: (context, snapshot) {
@@ -57,7 +55,7 @@ class ScreenUserReportList extends StatelessWidget {
                                     backgroundColor: Colors.black,
                                   ),
                                   title: Text(
-                                    "Your Complaints (${data[index].reportuserissues.toString()}) is Registered On nearby Police Station ",
+                                    "Your Complaints (${data[index].reportManagerissues.toString()}) is Registered On nearby Police Station ",
                                     style: GoogleFonts.overpass(
                                         fontWeight: FontWeight.bold),
                                   ),

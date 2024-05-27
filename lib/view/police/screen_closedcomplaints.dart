@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:secure_kare/view/police/screen_complaints.dart';
 import 'package:secure_kare/view/police/screen_readclosedcomplaints.dart';
+import 'package:secure_kare/viewmodel/policecontroll.dart';
 import 'package:secure_kare/viewmodel/ui_work_provider.dart';
 
 class ScreenClosedComplaints extends StatelessWidget {
@@ -46,38 +47,58 @@ class ScreenClosedComplaints extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              itemBuilder: (context, index) {
-                return ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: AssetImage(workprovider.person),
-                  ),
-                  title: Text("Suhail Ibraheem", style: GoogleFonts.alata()),
-                  subtitle: Text(
-                    "This case was closed",
-                    style: GoogleFonts.nunitoSans(),
-                  ),
-                  trailing: SizedBox(
-                    height: 30,
-                    child: OutlinedButton(
-                        style: OutlinedButton.styleFrom(
-                            backgroundColor: Colors.indigo,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10))),
-                        onPressed: () {
-                          Navigator.of(context)
-                              .pushReplacement(MaterialPageRoute(
-                            builder: (context) => ScreenReadClosedComplaints(),
-                          ));
-                        },
-                        child: Text(
-                          "Read",
-                          style: GoogleFonts.amaranth(color: Colors.white),
-                        )),
-                  ),
-                );
-              },
-            ),
+            child: Consumer<PoliceControler>(
+                builder: (context, controller, child) {
+              return FutureBuilder(
+                  future: controller.fetchCompleint("completed"),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    final data = controller.userreport;
+                    return ListView.builder(
+                      itemCount: data.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          leading: CircleAvatar(
+                            backgroundImage: AssetImage(workprovider.person),
+                          ),
+                          title: Text(data[index].reportid.toString(),
+                              style: GoogleFonts.alata()),
+                          subtitle: Text(
+                            "This case was closed",
+                            style: GoogleFonts.nunitoSans(),
+                          ),
+                          trailing: SizedBox(
+                            height: 30,
+                            child: OutlinedButton(
+                                style: OutlinedButton.styleFrom(
+                                    backgroundColor: Colors.indigo,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(10))),
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pushReplacement(MaterialPageRoute(
+                                    builder: (context) =>
+                                        ScreenReadClosedComplaints(
+                                      model: data[index],
+                                    ),
+                                  ));
+                                },
+                                child: Text(
+                                  "Read",
+                                  style:
+                                      GoogleFonts.amaranth(color: Colors.white),
+                                )),
+                          ),
+                        );
+                      },
+                    );
+                  });
+            }),
           )
         ],
       ),

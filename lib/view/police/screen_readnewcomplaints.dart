@@ -1,11 +1,17 @@
+import 'dart:developer';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:secure_kare/model/report_model.dart';
 import 'package:secure_kare/view/police/screen_newcomplaints.dart';
+import 'package:secure_kare/viewmodel/policecontroll.dart';
 import 'package:secure_kare/viewmodel/ui_work_provider.dart';
 
 class ScreenReadNewComplaints extends StatelessWidget {
-  const ScreenReadNewComplaints({super.key});
+  final Reports model;
+  ScreenReadNewComplaints({super.key, required this.model});
 
   @override
   Widget build(BuildContext context) {
@@ -16,11 +22,12 @@ class ScreenReadNewComplaints extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
             onPressed: () {
-              Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) {
-                  return ScreenNewComplaints();
-                },
-              ));
+              // Navigator.of(context).pushReplacement(MaterialPageRoute(
+              //   builder: (context) {
+              //     return ScreenNewComplaints();
+              //   },
+              // ));
+              Navigator.pop(context);
             },
             icon: const Icon(
               Icons.arrow_circle_left_outlined,
@@ -50,13 +57,17 @@ class ScreenReadNewComplaints extends StatelessWidget {
               const SizedBox(
                 width: 10,
               ),
-              CircleAvatar(
-                backgroundImage: AssetImage(workprovider.person),
+              Consumer(
+                builder: (context, insatnce, _) {
+                  return CircleAvatar(
+                    backgroundImage: AssetImage(workprovider.person),
+                  );
+                },
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 100, left: 10),
                 child: Text(
-                  "I am writing to file a formal complaint regarding \nsafety hazards present at the construction site\n located at [Address/Location]. As a construction\n worker employed at this site, I have observed \nseveral alarming issues that pose significant risks to\n the safety and well-being of myself and my \ncolleagues.  ",
+                  "${model.reportid}\n,${model.reportManagerissues}",
                   maxLines: 10,
                   style: GoogleFonts.mukta(),
                 ),
@@ -74,7 +85,15 @@ class ScreenReadNewComplaints extends StatelessWidget {
                       backgroundColor: Colors.indigo,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10))),
-                  onPressed: () {},
+                  onPressed: () {
+                    // log(model.);
+                    FirebaseFirestore.instance
+                        .collection('Reports')
+                        .doc(model.id)
+                        .update({
+                      'reportstatus': 'proceses',
+                    });
+                  },
                   child: Text(
                     "Accept",
                     style: GoogleFonts.amaranth(color: Colors.white),

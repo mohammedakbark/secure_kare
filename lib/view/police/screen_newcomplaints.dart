@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:secure_kare/view/police/screen_complaints.dart';
@@ -18,61 +20,6 @@ class ScreenNewComplaints extends StatefulWidget {
 }
 
 class _ScreenNewComplaintsState extends State<ScreenNewComplaints> {
-  Stream? complaint;
-
-  getthecompl() async {
-    complaint = await PoliceControler().fetchCompleint();
-  }
-
-  @override
-  void initState() {
-    getthecompl();
-    super.initState();
-  }
-
-  Widget allcomplaint() {
-    return StreamBuilder(
-        stream: complaint,
-        builder: (context, AsyncSnapshot snapshot) {
-          return ListView.builder(
-            itemCount: snapshot.data.docs.length,
-            itemBuilder: (context, index) {
-              final singledat = snapshot.data;
-
-              return ListTile(
-                leading: CircleAvatar(
-                    // backgroundImage:
-                    //     AssetImage('workprovider.person'),
-                    ),
-                title: Text('report[index].reportname.toString()',
-                    style: GoogleFonts.alata()),
-                subtitle: Text(
-                  "Reported a new complaint",
-                  style: GoogleFonts.nunitoSans(),
-                ),
-                trailing: SizedBox(
-                  height: 30,
-                  child: OutlinedButton(
-                      style: OutlinedButton.styleFrom(
-                          backgroundColor: Colors.indigo,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10))),
-                      onPressed: () {
-                        Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) => ScreenReadNewComplaints(),
-                        ));
-                      },
-                      child: Text(
-                        "Read",
-                        style: GoogleFonts.amaranth(color: Colors.white),
-                      )),
-                ),
-              );
-            },
-          );
-        });
-  }
-
   @override
   Widget build(BuildContext context) {
     // final workprovider = Provider.of<WorkProvider>(context);
@@ -81,11 +28,12 @@ class _ScreenNewComplaintsState extends State<ScreenNewComplaints> {
       appBar: AppBar(
         leading: IconButton(
             onPressed: () {
-              Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) {
-                  return ScreenComplaints();
-                },
-              ));
+              // Navigator.of(context).pushReplacement(MaterialPageRoute(
+              //   builder: (context) {
+              //     return ScreenComplaints();
+              //   },
+              // ));
+              Navigator.pop(context);
             },
             icon: const Icon(
               Icons.arrow_circle_left_outlined,
@@ -111,7 +59,61 @@ class _ScreenNewComplaintsState extends State<ScreenNewComplaints> {
       body: Column(
         children: [
           Expanded(
-            child: allcomplaint(),
+            child: Consumer<PoliceControler>(
+              builder: (context, instance, _) {
+                return FutureBuilder(
+                    future: instance.fetchCompleint('reported'),
+                    builder: (context, snapshot) {
+                      final data = instance.userreport;
+                      return data.isEmpty
+                          ? Center(
+                              child: Text('No complaint find'),
+                            )
+                          : ListView.builder(
+                              itemCount: data.length,
+                              itemBuilder: (context, index) {
+                                final singledat = snapshot.data;
+
+                                return ListTile(
+                                  leading: CircleAvatar(
+                                      // backgroundImage:
+                                      //     AssetImage('workprovider.person'),
+                                      ),
+                                  title: Text(data[index].reportid.toString(),
+                                      style: GoogleFonts.alata()),
+                                  subtitle: Text(
+                                    "Reported a new complaint",
+                                    style: GoogleFonts.nunitoSans(),
+                                  ),
+                                  trailing: SizedBox(
+                                    height: 30,
+                                    child: OutlinedButton(
+                                        style: OutlinedButton.styleFrom(
+                                            backgroundColor: Colors.indigo,
+                                            shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(10))),
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .push(MaterialPageRoute(
+                                            builder: (context) =>
+                                                ScreenReadNewComplaints(
+                                              model: instance.userreport[index],
+                                            ),
+                                          ));
+                                        },
+                                        child: Text(
+                                          "Read",
+                                          style: GoogleFonts.amaranth(
+                                              color: Colors.white),
+                                        )),
+                                  ),
+                                );
+                              },
+                            );
+                    });
+              },
+            ),
           ),
         ],
       ),

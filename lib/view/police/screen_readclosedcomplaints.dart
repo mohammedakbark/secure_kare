@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:secure_kare/model/report_model.dart';
 import 'package:secure_kare/view/police/screen_closedcomplaints.dart';
 import 'package:secure_kare/viewmodel/ui_work_provider.dart';
 
 class ScreenReadClosedComplaints extends StatelessWidget {
-  const ScreenReadClosedComplaints({super.key});
+  Reports model;
+  ScreenReadClosedComplaints({super.key, required this.model});
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +57,7 @@ class ScreenReadClosedComplaints extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(top: 100, left: 10),
                 child: Text(
-                  "I am writing to file a formal complaint regarding \nsafety hazards present at the construction site\n located at [Address/Location]. As a construction\n worker employed at this site, I have observed \nseveral alarming issues that pose significant risks to\n the safety and well-being of myself and my \ncolleagues.  ",
+                  model.reportManagerissues.toString(),
                   maxLines: 10,
                   style: GoogleFonts.mukta(),
                 ),

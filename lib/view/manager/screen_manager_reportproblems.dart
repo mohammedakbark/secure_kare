@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:random_string/random_string.dart';
-import 'package:secure_kare/model/manager_report_model.dart';
+import 'package:secure_kare/model/report_model.dart';
 import 'package:secure_kare/model/projectmodel.dart';
 import 'package:secure_kare/view/manager/screen_home_manager.dart';
 import 'package:secure_kare/viewmodel/function_provider.dart';
@@ -14,7 +14,7 @@ class ScreenManagerReportProblems extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ManagerReportModel managerReportModel = ManagerReportModel();
+    // ManagerReportModel managerReportModel = ManagerReportModel();
     ManagerReportService managerReportServicer = ManagerReportService();
     final funprovider = Provider.of<FunProvider>(context);
     return Scaffold(
@@ -72,7 +72,9 @@ class ScreenManagerReportProblems extends StatelessWidget {
                   String id = randomAlphaNumeric(10);
                   managerReportServicer
                       .addManagerreports(
-                          ManagerReportModel(
+                          Reports(
+                            reportstatus: "reported",
+                              from: "Manager",
                               reportid: reportid,
                               reportManagerissues: funprovider
                                   .managerreportproblemcontroller.text,

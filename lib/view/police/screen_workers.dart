@@ -18,11 +18,12 @@ class ScreenWorkers extends StatelessWidget {
       appBar: AppBar(
         leading: IconButton(
             onPressed: () {
-              Navigator.of(context).pushReplacement(MaterialPageRoute(
-                builder: (context) {
-                  return ScreenCompamw();
-                },
-              ));
+              // Navigator.of(context).pushReplacement(MaterialPageRoute(
+              //   builder: (context) {
+              //     return ScreenCompamw();
+              //   },
+              // ));
+              Navigator.pop(context);
             },
             icon: const Icon(
               Icons.arrow_circle_left_outlined,

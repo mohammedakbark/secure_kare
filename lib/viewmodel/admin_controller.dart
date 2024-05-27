@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:secure_kare/model/agentmodel.dart';
 import 'package:secure_kare/model/managermodel.dart';
+import 'package:secure_kare/model/report_model.dart';
 import 'package:secure_kare/model/usermodel.dart';
 import 'package:secure_kare/model/workersmodel.dart';
 
@@ -169,5 +170,13 @@ class AdminController with ChangeNotifier {
 
   Future removeacceptedWorkers(id) async {
     db.collection("ACCEPTED WORKERS").doc().delete();
+  }
+
+   List<Reports> listofReporst = [];
+  fetchAllReports() async {
+    final snapsht =
+        await FirebaseFirestore.instance.collection("Reports").get();
+    listofReporst =
+        snapsht.docs.map((e) => Reports.fromJson(e.data())).toList();
   }
 }
