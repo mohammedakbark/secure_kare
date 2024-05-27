@@ -18,23 +18,23 @@ class ProjectDetailsModel {
       this.projectimage});
   Map<String, dynamic> toJson(docId) => {
         //agentaddprojrct
-        "agentaddprojectname": agentaddprojectname,
-        "agentaddplace": agentaddplace,
-        "agentaddstartdate": agentaddstartdate,
-        "agentaddenddate": agentaddenddate,
-        "agentaddnoworers": agentaddnoworers,
-        "agentaddbudget": agentaddbudget,
+        "projectName": agentaddprojectname,
+        "place": agentaddplace,
+        "startDate": agentaddstartdate,
+        "endDate": agentaddenddate,
+        "numberOfWorkers": agentaddnoworers,
+        "budget": agentaddbudget,
         "agentaddmanager": agentaddmanager,
         "projectimage": projectimage
       };
   factory ProjectDetailsModel.fromJson(Map<String, dynamic> json) {
     return ProjectDetailsModel(
-        agentaddprojectname: json["agentaddprojectname"],
-        agentaddplace: json["agentaddplace"],
-        agentaddstartdate: json["agentaddstartdate"],
-        agentaddenddate: json["agentaddenddate"],
-        agentaddnoworers: json["agentaddnoworers"],
-        agentaddbudget: json["agentaddbudget"],
+        agentaddprojectname: json["projectName"],
+        agentaddplace: json["place"],
+        agentaddstartdate: json["startDate"],
+        agentaddenddate: json["endDate"],
+        agentaddnoworers: json["numberOfWorkers"],
+        agentaddbudget: json["budget"],
         agentaddmanager: json["agentaddmanager"],
         projectimage: json["projectimage"]);
   }

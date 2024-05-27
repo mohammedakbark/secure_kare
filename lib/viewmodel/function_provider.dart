@@ -28,7 +28,7 @@ class FunProvider extends ChangeNotifier {
   String imageurladhaar = "";
   String? uid = "";
   UserModel? usermodelobj;
-  AgentModel ?agentmodelobj;
+  AgentModel? agentmodelobj;
   FirebaseAuth auth = FirebaseAuth.instance;
   final db = FirebaseFirestore.instance;
   EmailOTP myAuth = EmailOTP();
@@ -103,9 +103,8 @@ class FunProvider extends ChangeNotifier {
   final agentaddbudget = TextEditingController();
   final agentaddmanager = TextEditingController();
   //Agent AddManager
- 
-  //Agent Add Workers
 
+  //Agent Add Workers
 
   final workerlogemail = TextEditingController();
 
@@ -149,7 +148,6 @@ class FunProvider extends ChangeNotifier {
   final managerloginemail = TextEditingController();
   final managerloginpassword = TextEditingController();
   //Agent Login
-
 
   // Future signup(context) async {
   //   try {
@@ -305,9 +303,9 @@ class FunProvider extends ChangeNotifier {
   //   _image = img;
   //   notifyListeners();
   // }
-  
+
 // screenAddworkers//
- Future pickimagefromgallery() async {
+  Future pickimagefromgallery() async {
     ImagePicker imagePicker = ImagePicker();
     SettableMetadata metadata = SettableMetadata(contentType: "image/jpeg");
     XFile? file = await imagePicker.pickImage(source: ImageSource.gallery);
@@ -503,7 +501,7 @@ class FunProvider extends ChangeNotifier {
                     backgroundColor: Colors.indigo),
                 onPressed: () {
                   final CollectionReference agent =
-                      FirebaseFirestore.instance.collection("AGENT");
+                      FirebaseFirestore.instance.collection("ACCEPTED WORKERS");
                   print("update");
                   update();
                   Navigator.pop(context);
@@ -521,7 +519,7 @@ class FunProvider extends ChangeNotifier {
   update() {
     final DocumentReference<Map<String, dynamic>> user = FirebaseFirestore
         .instance
-        .collection("WORKERS")
+        .collection("ACCEPTED WORKERS")
         .doc(FirebaseAuth.instance.currentUser!.uid);
     user.update({
       "workersname": workernameupdate.text,
@@ -539,16 +537,12 @@ class FunProvider extends ChangeNotifier {
     await FlutterEmailSender.send(email);
   }
 
-  // 
+  //
   //signupwithworkers
 
-  
   //Signupwith manager
 
-  
-
   //Signupwith Agent
-  
 
 //login worker
   signin(context) async {
@@ -670,7 +664,7 @@ class FunProvider extends ChangeNotifier {
 
   fetchCurrentUserData() async {
     final snapshot = await FirebaseFirestore.instance
-        .collection("WORKERS")
+        .collection("ACCEPTED WORKERS")
         .doc(FirebaseAuth.instance.currentUser!.uid)
         .get();
     if (snapshot.exists) {
@@ -680,7 +674,7 @@ class FunProvider extends ChangeNotifier {
       workage = workersModel!.workersage;
       workemail = workersModel!.workersemail;
       workpassword = workersModel!.workerspassword;
-      workimage = imageurl;
+      workimage = workersModel!.workerimage;
 
       print(workname);
       print(workersModel!.workersage);
@@ -733,8 +727,6 @@ class FunProvider extends ChangeNotifier {
   // String? agentstate;
   // String? agentpassword;
   // String? agentimage;
-
-  
 
 // SPECIFIED DATA FETCHING FROM ONE COLLECTION IN SCREEN
 //userreport

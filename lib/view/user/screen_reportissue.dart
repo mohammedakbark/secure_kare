@@ -70,10 +70,12 @@ class ScreenReportIssue extends StatelessWidget {
                   String id = randomAlphaNumeric(10);
                   userReportServicer.addUserreports(
                       UserReportsModel(
-                          reportid: reportid,
-                          reportuserissues:
-                              funprovider.reportproblemcontroller.text,
-                          id: id),
+                        reportid: reportid,
+                        reportuserissues:
+                            funprovider.reportproblemcontroller.text,
+                        id: id,
+                        reportname: funprovider.workname.toString(),
+                      ),
                       reportid,
                       id);
                   Navigator.of(context).push(MaterialPageRoute(

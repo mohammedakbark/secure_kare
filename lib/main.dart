@@ -8,6 +8,8 @@ import 'package:secure_kare/viewmodel/admin_controller.dart';
 import 'package:secure_kare/viewmodel/agent_controller.dart';
 
 import 'package:secure_kare/viewmodel/function_provider.dart';
+import 'package:secure_kare/viewmodel/manager.dart';
+import 'package:secure_kare/viewmodel/policecontroll.dart';
 import 'package:secure_kare/viewmodel/ui_work_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -45,20 +47,23 @@ class MyApp extends StatelessWidget {
               return AdminController();
             },
           ),
-           ChangeNotifierProvider<AgentController>(
+          ChangeNotifierProvider<AgentController>(
             create: (context) {
               return AgentController();
             },
           ),
+          ChangeNotifierProvider(create: (context) => Maneger()),
+          ChangeNotifierProvider(create: (context) => PoliceControler())
         ],
         child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'Flutter Demo',
-            theme: ThemeData(
-              colorScheme: ColorScheme.fromSeed(
-                  seedColor: Color.fromARGB(255, 255, 255, 255)),
-              // primarySwatch: Colors.blue,
-            ),
-            home: kIsWeb ? AdminHome() : ScreenSplash()));
+          debugShowCheckedModeBanner: false,
+          title: 'Flutter Demo',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+                seedColor: Color.fromARGB(255, 255, 255, 255)),
+            // primarySwatch: Colors.blue,
+          ),
+          home: kIsWeb ? AdminHome() : ScreenSplash(),
+        ));
   }
 }

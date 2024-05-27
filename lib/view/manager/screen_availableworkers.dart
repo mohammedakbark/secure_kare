@@ -9,7 +9,7 @@ import 'package:secure_kare/viewmodel/ui_work_provider.dart';
 class ScreenAgentAvailableWorkers extends StatelessWidget {
   ScreenAgentAvailableWorkers({super.key});
   final CollectionReference workers =
-      FirebaseFirestore.instance.collection("WORKERS");
+      FirebaseFirestore.instance.collection("ACCEPTED WORKERS");
 
   @override
   Widget build(BuildContext context) {
